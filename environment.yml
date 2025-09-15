@@ -1,0 +1,21 @@
+name: audio-classification
+channels:
+  - pytorch
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pytorch>=2.0
+  - torchaudio
+  - librosa
+  - pandas
+  - numpy
+  - matplotlib
+  - seaborn
+  - scikit-learn
+  - tqdm
+  - wandb
+  - jupyterlab
+  - pip
+  - pip:
+    - einops
+    - transformers
