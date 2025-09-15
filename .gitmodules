@@ -1,0 +1,9 @@
+[submodule "external_models/mamba"]
+	path = external_models/mamba
+	url = https://github.com/MeepMutyala/mambaSpeech.git
+[submodule "external_models/liquid-S4"]
+	path = external_models/liquid-S4
+	url = https://github.com/MeepMutyala/liquid-s4.git
+[submodule "external_models/vjepa2"]
+	path = external_models/vjepa2
+	url = https://github.com/MeepMutyala/vjepa2.git
