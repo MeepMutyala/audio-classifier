@@ -4,7 +4,7 @@ import torch.nn as nn
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../external_models/vjepa2/src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../external_models/vjepa2'))
 
 from src.models.vision_transformer import VisionTransformer
 from src.models.attentive_pooler import AttentiveClassifier
