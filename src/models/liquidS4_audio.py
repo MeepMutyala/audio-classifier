@@ -3,23 +3,32 @@ import torch.nn as nn
 import sys
 import os
 
-# Add liquid-S4 repository root to path
+# Add liquid-S4 repository root to path FIRST
 liquid_s4_root = os.path.join(os.path.dirname(__file__), '../../external_models/liquid-S4')
 if liquid_s4_root not in sys.path:
     sys.path.insert(0, liquid_s4_root)
 
-# Create all missing __init__.py files
-def create_missing_init_files():
+# Create ALL missing __init__.py files BEFORE any imports
+def setup_liquid_s4_packages():
     """Create all missing __init__.py files in the liquid-S4 repository"""
     init_files = [
         'src/__init__.py',
         'src/models/__init__.py', 
         'src/tasks/__init__.py',
-        'src/models/sequence/ss/__init__.py',
+        'src/utils/__init__.py',
         'src/callbacks/__init__.py',
+        'src/dataloaders/__init__.py',
+        'src/models/sequence/__init__.py',
+        'src/models/sequence/ss/__init__.py',
         'src/models/sequence/attention/__init__.py',
         'src/models/sequence/convs/__init__.py',
-        'src/models/sequence/ss/standalone/__init__.py'
+        'src/models/sequence/rnns/__init__.py',
+        'src/models/sequence/ss/standalone/__init__.py',
+        'src/models/nn/__init__.py',
+        'src/models/baselines/__init__.py',
+        'src/models/functional/__init__.py',
+        'src/models/hippo/__init__.py',
+        'src/models/s4/__init__.py'
     ]
     
     for init_file in init_files:
@@ -30,10 +39,10 @@ def create_missing_init_files():
                 f.write('# Package init file\n')
             print(f"Created: {file_path}")
 
-# Create missing files
-create_missing_init_files()
+# Set up all packages BEFORE importing
+setup_liquid_s4_packages()
 
-# Now try to import
+# Now import the modules - this should work!
 try:
     from src.models.sequence.model import SequenceModel
     from src.models.sequence.ss.s4 import S4
@@ -41,31 +50,8 @@ try:
     print("✅ Successfully imported liquid-S4 modules!")
 except ImportError as e:
     print(f"❌ Import failed: {e}")
-    print("Trying alternative import method...")
-    
-    # Fallback: Use importlib with proper module setup
-    import importlib.util
-    
-    def import_module_with_deps(module_name, file_path):
-        # Add the module's directory to sys.path temporarily
-        module_dir = os.path.dirname(file_path)
-        if module_dir not in sys.path:
-            sys.path.insert(0, module_dir)
-        
-        spec = importlib.util.spec_from_file_location(module_name, file_path)
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[module_name] = module
-        spec.loader.exec_module(module)
-        return module
-    
-    # Import with dependency handling
-    sequence_model_path = os.path.join(liquid_s4_root, 'src', 'models', 'sequence', 'model.py')
-    s4_path = os.path.join(liquid_s4_root, 'src', 'models', 'sequence', 'ss', 's4.py')
-    decoders_path = os.path.join(liquid_s4_root, 'src', 'tasks', 'decoders.py')
-    
-    SequenceModel = import_module_with_deps('sequence_model', sequence_model_path).SequenceModel
-    S4 = import_module_with_deps('s4', s4_path).S4
-    NDDecoder = import_module_with_deps('decoders', decoders_path).NDDecoder
+    # If it still fails, let's try a different approach
+    raise e
 
 class LiquidS4AudioClassifier(nn.Module):
     """Audio classification wrapper for Liquid S4"""
