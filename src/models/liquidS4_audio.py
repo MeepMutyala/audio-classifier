@@ -3,107 +3,12 @@ import torch.nn as nn
 import sys
 import os
 
-# Add liquid-S4 repository root to path
-liquid_s4_root = os.path.join(os.path.dirname(__file__), '../../external_models/liquid-S4')
-if liquid_s4_root not in sys.path:
-    sys.path.insert(0, liquid_s4_root)
+# Add submodules to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../external_models/liquid-s4'))
 
-# Create ALL missing __init__.py files
-def setup_liquid_s4_packages():
-    """Create all missing __init__.py files in the liquid-S4 repository"""
-    init_files = [
-        'src/__init__.py',
-        'src/models/__init__.py', 
-        'src/tasks/__init__.py',
-        'src/utils/__init__.py',
-        'src/callbacks/__init__.py',
-        'src/dataloaders/__init__.py',
-        'src/models/sequence/__init__.py',
-        'src/models/sequence/ss/__init__.py',
-        'src/models/sequence/attention/__init__.py',
-        'src/models/sequence/convs/__init__.py',
-        'src/models/sequence/rnns/__init__.py',
-        'src/models/sequence/ss/standalone/__init__.py',
-        'src/models/nn/__init__.py',
-        'src/models/baselines/__init__.py',
-        'src/models/functional/__init__.py',
-        'src/models/hippo/__init__.py',
-        'src/models/s4/__init__.py'
-    ]
-    
-    for init_file in init_files:
-        file_path = os.path.join(liquid_s4_root, init_file)
-        if not os.path.exists(file_path):
-            os.makedirs(os.path.dirname(file_path), exist_ok=True)
-            with open(file_path, 'w') as f:
-                f.write('# Package init file\n')
-            print(f"Created: {file_path}")
-
-setup_liquid_s4_packages()
-
-# Force reload of sys.modules to clear any cached imports
-modules_to_remove = [key for key in sys.modules.keys() if key.startswith('src.')]
-for module in modules_to_remove:
-    del sys.modules[module]
-
-# Now try importing with explicit module loading
-import importlib.util
-import importlib
-
-def load_module_from_file(module_name, file_path):
-    """Load a module from a file path and handle its dependencies"""
-    spec = importlib.util.spec_from_file_location(module_name, file_path)
-    module = importlib.util.module_from_spec(spec)
-    
-    # Add the module to sys.modules before executing
-    sys.modules[module_name] = module
-    
-    # Execute the module
-    spec.loader.exec_module(module)
-    return module
-
-# Load dependencies first
-try:
-    # Load utils first (needed by other modules)
-    utils_path = os.path.join(liquid_s4_root, 'src', 'utils', 'config.py')
-    if os.path.exists(utils_path):
-        load_module_from_file('src.utils.config', utils_path)
-    
-    # Load base modules
-    base_path = os.path.join(liquid_s4_root, 'src', 'models', 'sequence', 'base.py')
-    if os.path.exists(base_path):
-        load_module_from_file('src.models.sequence.base', base_path)
-    
-    # Load block module
-    block_path = os.path.join(liquid_s4_root, 'src', 'models', 'sequence', 'block.py')
-    if os.path.exists(block_path):
-        load_module_from_file('src.models.sequence.block', block_path)
-    
-    # Load components
-    components_path = os.path.join(liquid_s4_root, 'src', 'models', 'nn', 'components.py')
-    if os.path.exists(components_path):
-        load_module_from_file('src.models.nn.components', components_path)
-    
-    # Now load the main modules
-    sequence_model_path = os.path.join(liquid_s4_root, 'src', 'models', 'sequence', 'model.py')
-    SequenceModel = load_module_from_file('src.models.sequence.model', sequence_model_path).SequenceModel
-    
-    s4_path = os.path.join(liquid_s4_root, 'src', 'models', 'sequence', 'ss', 's4.py')
-    S4 = load_module_from_file('src.models.sequence.ss.s4', s4_path).S4
-    
-    decoders_path = os.path.join(liquid_s4_root, 'src', 'tasks', 'decoders.py')
-    NDDecoder = load_module_from_file('src.tasks.decoders', decoders_path).NDDecoder
-    
-    print("✅ Successfully loaded liquid-S4 modules with explicit loading!")
-    
-except Exception as e:
-    print(f"❌ Explicit loading failed: {e}")
-    print("The liquid-S4 repository may have complex dependencies that can't be easily resolved.")
-    print("At this point, we may need to either:")
-    print("1. Use a different S4 implementation")
-    print("2. Modify the liquid-S4 repository structure")
-    print("3. Use the standalone S4 implementation")
-    raise e
+from src.models.sequence.model import SequenceModel
+from src.models.sequence.ss.s4 import S4
+from src.tasks.decoders import NDDecoder
 
 class LiquidS4AudioClassifier(nn.Module):
     """Audio classification wrapper for Liquid S4"""
