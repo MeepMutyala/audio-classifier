@@ -4,7 +4,7 @@ import sys
 import os
 
 # Add submodules to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../external_models/liquid-s4'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../external_models/liquid-s4/src'))
 
 from src.models.sequence.model import SequenceModel
 from src.models.sequence.ss.s4 import S4
