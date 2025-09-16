@@ -4,11 +4,11 @@ import sys
 import os
 
 # Add submodules to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../external_models/liquid-S4/src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../external_models/liquid-S4'))
 
-from models.sequence.model import SequenceModel
-from models.sequence.ss.s4 import S4
-from tasks.decoders import NDDecoder
+from src.models.sequence.model import SequenceModel
+from src.models.sequence.ss.s4 import S4
+from src.tasks.decoders import NDDecoder
 
 class LiquidS4AudioClassifier(nn.Module):
     """Audio classification wrapper for Liquid S4"""

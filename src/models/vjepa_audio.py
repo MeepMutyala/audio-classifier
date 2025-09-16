@@ -6,8 +6,8 @@ import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../external_models/vjepa2/src'))
 
-from models.vision_transformer import VisionTransformer
-from models.attentive_pooler import AttentiveClassifier
+from src.models.vision_transformer import VisionTransformer
+from src.models.attentive_pooler import AttentiveClassifier
 
 class VJEPA2AudioClassifier(nn.Module):
     def __init__(self, 
