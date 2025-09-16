@@ -1,0 +1,41 @@
+# Cloud-optimized requirements for audio classification training
+# Core PyTorch ecosystem
+torch>=2.0.0
+torchaudio>=2.0.0
+torchvision>=0.15.0
+
+# Audio processing
+librosa>=0.10.0
+soundfile>=0.12.0
+
+# Data handling
+pandas>=1.5.0
+numpy>=1.21.0
+scikit-learn>=1.1.0
+
+# Visualization and monitoring
+matplotlib>=3.5.0
+seaborn>=0.11.0
+tqdm>=4.64.0
+wandb>=0.13.0
+
+# Utilities
+einops>=0.6.0
+transformers>=4.20.0
+
+# Cloud-specific optimizations
+# For Google Colab
+google-colab>=1.0.0
+
+# For AWS SageMaker
+sagemaker>=2.100.0
+
+# For Kaggle
+kaggle>=1.5.0
+
+# Memory optimization
+psutil>=5.9.0
+memory-profiler>=0.60.0
+
+# Optional: For distributed training
+# torch-distributed>=0.1.0  # Uncomment if using multi-GPU
