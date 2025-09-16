@@ -3,14 +3,37 @@ import torch.nn as nn
 import sys
 import os
 
-# Add liquid-S4 repository root to path (preserves internal src.* imports)
+# Instead of:
+# from src.models.sequence.model import SequenceModel
+# from src.models.sequence.ss.s4 import S4
+# from src.tasks.decoders import NDDecoder
+
+# Use direct imports:
+import importlib.util
+import sys
+import os
+
+# Add liquid-S4 repository root to path
 liquid_s4_root = os.path.join(os.path.dirname(__file__), '../../external_models/liquid-S4')
 if liquid_s4_root not in sys.path:
     sys.path.insert(0, liquid_s4_root)
 
-from src.models.sequence.model import SequenceModel
-from src.models.sequence.ss.s4 import S4
-from src.tasks.decoders import NDDecoder
+# Import modules directly by file path
+def import_module_from_path(module_name, file_path):
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    return module
+
+# Import the required modules
+sequence_model_path = os.path.join(liquid_s4_root, 'src', 'models', 'sequence', 'model.py')
+s4_path = os.path.join(liquid_s4_root, 'src', 'models', 'sequence', 'ss', 's4.py')
+decoders_path = os.path.join(liquid_s4_root, 'src', 'tasks', 'decoders.py')
+
+SequenceModel = import_module_from_path('sequence_model', sequence_model_path).SequenceModel
+S4 = import_module_from_path('s4', s4_path).S4
+NDDecoder = import_module_from_path('decoders', decoders_path).NDDecoder
 
 class LiquidS4AudioClassifier(nn.Module):
     """Audio classification wrapper for Liquid S4"""
