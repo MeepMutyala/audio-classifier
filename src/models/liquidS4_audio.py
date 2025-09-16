@@ -3,37 +3,34 @@ import torch.nn as nn
 import sys
 import os
 
-# Instead of:
-# from src.models.sequence.model import SequenceModel
-# from src.models.sequence.ss.s4 import S4
-# from src.tasks.decoders import NDDecoder
-
-# Use direct imports:
-import importlib.util
-import sys
-import os
-
-# Add liquid-S4 repository root to path
+# Add liquid-S4 repository root to path (this is crucial!)
 liquid_s4_root = os.path.join(os.path.dirname(__file__), '../../external_models/liquid-S4')
 if liquid_s4_root not in sys.path:
     sys.path.insert(0, liquid_s4_root)
 
-# Import modules directly by file path
-def import_module_from_path(module_name, file_path):
-    spec = importlib.util.spec_from_file_location(module_name, file_path)
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[module_name] = module
-    spec.loader.exec_module(module)
-    return module
+# Create missing __init__.py files if they don't exist
+def ensure_init_files():
+    init_files = [
+        'src/__init__.py',
+        'src/models/__init__.py', 
+        'src/tasks/__init__.py',
+        'src/models/sequence/ss/__init__.py'
+    ]
+    
+    for init_file in init_files:
+        file_path = os.path.join(liquid_s4_root, init_file)
+        if not os.path.exists(file_path):
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            with open(file_path, 'w') as f:
+                f.write('# Package init file\n')
 
-# Import the required modules
-sequence_model_path = os.path.join(liquid_s4_root, 'src', 'models', 'sequence', 'model.py')
-s4_path = os.path.join(liquid_s4_root, 'src', 'models', 'sequence', 'ss', 's4.py')
-decoders_path = os.path.join(liquid_s4_root, 'src', 'tasks', 'decoders.py')
+# Ensure all required __init__.py files exist
+ensure_init_files()
 
-SequenceModel = import_module_from_path('sequence_model', sequence_model_path).SequenceModel
-S4 = import_module_from_path('s4', s4_path).S4
-NDDecoder = import_module_from_path('decoders', decoders_path).NDDecoder
+# Now import normally - this should work!
+from src.models.sequence.model import SequenceModel
+from src.models.sequence.ss.s4 import S4
+from src.tasks.decoders import NDDecoder
 
 class LiquidS4AudioClassifier(nn.Module):
     """Audio classification wrapper for Liquid S4"""
