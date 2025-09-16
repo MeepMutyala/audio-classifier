@@ -3,12 +3,14 @@ import torch.nn as nn
 import sys
 import os
 
-# Add submodules to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../external_models/liquid-S4/src'))
+# Add liquid-S4 repository root to path (preserves internal src.* imports)
+liquid_s4_root = os.path.join(os.path.dirname(__file__), '../../external_models/liquid-S4')
+if liquid_s4_root not in sys.path:
+    sys.path.insert(0, liquid_s4_root)
 
-from models.sequence.model import SequenceModel
-from models.sequence.ss.s4 import S4
-from tasks.decoders import NDDecoder
+from src.models.sequence.model import SequenceModel
+from src.models.sequence.ss.s4 import S4
+from src.tasks.decoders import NDDecoder
 
 class LiquidS4AudioClassifier(nn.Module):
     """Audio classification wrapper for Liquid S4"""
