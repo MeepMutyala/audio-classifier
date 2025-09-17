@@ -6,8 +6,11 @@ import os
 # from external_models.vjepa2.src.models.vision_transformer import VisionTransformer
 # from external_models.vjepa2.src.models.attentive_pooler import AttentiveClassifier
 
-from models.vision_transformer import VisionTransformer
-from models.attentive_pooler import AttentiveClassifier
+# from models.vision_transformer import VisionTransformer
+# from models.attentive_pooler import AttentiveClassifier
+
+from vjepa2_models.vision_transformer import VisionTransformer
+from vjepa2_models.attentive_pooler import AttentiveClassifier
 
 # import external_models  # This triggers the sys.path setup
 # from src.models.vision_transformer import VisionTransformer
