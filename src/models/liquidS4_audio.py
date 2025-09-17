@@ -3,27 +3,27 @@ import torch.nn as nn
 import sys
 import os
 
-# Clean, simple imports - no sys.path manipulation needed!
-from external_models.liquid_S4.src.models.sequence.model import SequenceModel
-from external_models.liquid_S4.src.models.sequence.ss.s4 import S4
-from external_models.liquid_S4.src.tasks.decoders import NDDecoder
+# # Clean, simple imports - no sys.path manipulation needed!
+# from external_models.liquid_S4.src.models.sequence.model import SequenceModel
+# from external_models.liquid_S4.src.models.sequence.ss.s4 import S4
+# from external_models.liquid_S4.src.tasks.decoders import NDDecoder
 
-# # Add external models to path
-# external_models_path = os.path.join(os.path.dirname(__file__), '../../external_models')
-# liquid_s4_path = os.path.join(external_models_path, 'liquid-S4')
-# sys.path.insert(0, liquid_s4_path)
+# Add external models to path
+external_models_path = os.path.join(os.path.dirname(__file__), '../../external_models')
+liquid_s4_path = os.path.join(external_models_path, 'liquid-S4')
+sys.path.insert(0, liquid_s4_path)
 
-# # Direct imports from the submodule structure
-# try:
-#     from src.models.sequence.model import SequenceModel
-#     from src.models.sequence.ss.s4 import S4  
-#     from src.tasks.decoders import NDDecoder
-# except ModuleNotFoundError:
-#     # Fallback: try importing from the submodule directory directly
-#     sys.path.insert(0, os.path.join(liquid_s4_path, 'src'))
-#     from models.sequence.model import SequenceModel
-#     from models.sequence.ss.s4 import S4
-#     from tasks.decoders import NDDecoder
+# Direct imports from the submodule structure
+try:
+    from src.models.sequence.model import SequenceModel
+    from src.models.sequence.ss.s4 import S4
+    from src.tasks.decoders import NDDecoder
+except ModuleNotFoundError:
+    # Fallback: try importing from the submodule directory directly
+    sys.path.insert(0, os.path.join(liquid_s4_path, 'src'))
+    from models.sequence.model import SequenceModel
+    from models.sequence.ss.s4 import S4
+    from tasks.decoders import NDDecoder
 
 class LiquidS4AudioClassifier(nn.Module):
     """Audio classification wrapper for Liquid S4"""
