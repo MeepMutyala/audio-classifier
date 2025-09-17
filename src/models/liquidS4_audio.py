@@ -8,6 +8,10 @@ import os
 # from external_models.liquid_S4.src.models.sequence.ss.s4 import S4
 # from external_models.liquid_S4.src.tasks.decoders import NDDecoder
 
+from models.sequence.model import SequenceModel
+from models.sequence.ss.s4 import S4
+from tasks.decoders import NDDecoder
+
 # # Add external models to path
 # external_models_path = os.path.join(os.path.dirname(__file__), '../../external_models')
 # liquid_s4_path = os.path.join(external_models_path, 'liquid-S4')
@@ -25,10 +29,10 @@ import os
 #     from models.sequence.ss.s4 import S4
 #     from tasks.decoders import NDDecoder
 
-import external_models  # This triggers the sys.path setup
-from src.models.sequence.model import SequenceModel
-from src.models.sequence.ss.s4 import S4
-from src.tasks.decoders import NDDecoder
+# import external_models  # This triggers the sys.path setup
+# from src.models.sequence.model import SequenceModel
+# from src.models.sequence.ss.s4 import S4
+# from src.tasks.decoders import NDDecoder
 
 class LiquidS4AudioClassifier(nn.Module):
     """Audio classification wrapper for Liquid S4"""
