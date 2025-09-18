@@ -8,9 +8,9 @@ import os
 # from external_models.liquid_S4.src.models.sequence.ss.s4 import S4
 # from external_models.liquid_S4.src.tasks.decoders import NDDecoder
 
-from models.sequence.model import SequenceModel
-from models.sequence.ss.s4 import S4
-from tasks.decoders import NDDecoder
+from liquid_s4.models.sequence.model import SequenceModel
+from liquid_s4.models.sequence.ss.s4 import S4
+from liquid_s4.tasks.decoders import NDDecoder
 
 # from liquid_s4_models.sequence.model import SequenceModel
 # from liquid_s4_models.sequence.ss.s4 import S4
