@@ -8,13 +8,13 @@ import os
 # from external_models.liquid_S4.src.models.sequence.ss.s4 import S4
 # from external_models.liquid_S4.src.tasks.decoders import NDDecoder
 
-# from models.sequence.model import SequenceModel
-# from models.sequence.ss.s4 import S4
-# from tasks.decoders import NDDecoder
+from models.sequence.model import SequenceModel
+from models.sequence.ss.s4 import S4
+from tasks.decoders import NDDecoder
 
-from liquid_s4_models.sequence.model import SequenceModel
-from liquid_s4_models.sequence.ss.s4 import S4
-from liquid_s4_tasks.decoders import NDDecoder
+# from liquid_s4_models.sequence.model import SequenceModel
+# from liquid_s4_models.sequence.ss.s4 import S4
+# from liquid_s4_tasks.decoders import NDDecoder
 
 # # Add external models to path
 # external_models_path = os.path.join(os.path.dirname(__file__), '../../external_models')
