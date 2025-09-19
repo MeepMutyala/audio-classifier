@@ -148,3 +148,4 @@ Train all three models in separate sessions within your 30-hour weekly limit.
 ---
 
 **Ready to start?** Upload `kaggle_setup.ipynb` to Kaggle and begin training! 🚀
+

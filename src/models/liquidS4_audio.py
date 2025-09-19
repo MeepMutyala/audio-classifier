@@ -4,21 +4,16 @@ import sys
 import os
 from pathlib import Path
 
-# Robust import strategy: try packaged path first, then fall back to vendored source tree
-try:
-    from liquid_s4.models.sequence.model import SequenceModel
-    from liquid_s4.models.sequence.ss.s4 import S4
-    from liquid_s4.tasks.decoders import NDDecoder
-except ModuleNotFoundError:
-    # Fallback: import directly from vendored external_models/liquid-S4/src tree
-    repo_root = Path(__file__).resolve().parents[2]  # .../audio-classifier
-    ext_src = repo_root / 'external_models' / 'liquid-S4' / 'src'
-    if ext_src.is_dir() and str(ext_src) not in sys.path:
-        sys.path.insert(0, str(ext_src))
-    # Import from the top-level packages under that src tree
-    from models.sequence.model import SequenceModel
-    from models.sequence.ss.s4 import S4
-    from tasks.decoders import NDDecoder
+# Add liquid-S4 src to path and import directly
+repo_root = Path(__file__).resolve().parents[2]  # .../audio-classifier
+ext_src = repo_root / 'external_models' / 'liquid-S4' / 'src'
+if ext_src.is_dir() and str(ext_src) not in sys.path:
+    sys.path.insert(0, str(ext_src))
+
+# Import directly from the src structure
+from models.sequence.model import SequenceModel
+from models.sequence.ss.s4 import S4
+from tasks.decoders import NDDecoder
 
 class LiquidS4AudioClassifier(nn.Module):
     """Audio classification wrapper for Liquid S4"""

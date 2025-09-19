@@ -4,17 +4,15 @@ import sys
 import os
 from pathlib import Path
 
-# Prefer the proper vjepa2 package if installed; fall back to vendored source tree
-try:
-    from vjepa2.models.vision_transformer import VisionTransformer
-    from vjepa2.models.attentive_pooler import AttentiveClassifier
-except ModuleNotFoundError:
-    repo_root = Path(__file__).resolve().parents[2]
-    vjepa_src = repo_root / 'external_models' / 'vjepa2' / 'src'
-    if vjepa_src.is_dir() and str(vjepa_src) not in sys.path:
-        sys.path.insert(0, str(vjepa_src))
-    from vjepa2.models.vision_transformer import VisionTransformer
-    from vjepa2.models.attentive_pooler import AttentiveClassifier
+# Add vjepa2 src to path and import directly
+repo_root = Path(__file__).resolve().parents[2]
+vjepa_src = repo_root / 'external_models' / 'vjepa2' / 'src'
+if vjepa_src.is_dir() and str(vjepa_src) not in sys.path:
+    sys.path.insert(0, str(vjepa_src))
+
+# Import directly from the src structure
+from models.vision_transformer import VisionTransformer
+from models.attentive_pooler import AttentiveClassifier
 
 class VJEPA2AudioClassifier(nn.Module):
     def __init__(self, 
