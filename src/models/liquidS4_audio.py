@@ -62,7 +62,6 @@ class LiquidS4AudioClassifier(nn.Module):
         # Create S4 layer configuration
         s4_layer_config = {
             "_name_": "s4",
-            "d_model": d_model,
             "d_state": d_state,
             "l_max": l_max,
             "channels": 1,
@@ -157,7 +156,6 @@ class LiquidS4AudioClassifierAdvanced(nn.Module):
         # Advanced S4 layer with liquid kernel
         s4_layer_config = {
             "_name_": "s4",
-            "d_model": d_model,
             "d_state": d_state,
             "l_max": l_max,
             "channels": 1,
