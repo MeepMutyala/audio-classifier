@@ -5,9 +5,25 @@ import os
 from pathlib import Path
 
 # Add vjepa2 src to path and import directly
-repo_root = Path(__file__).resolve().parents[2]
-vjepa_src = repo_root / 'external_models' / 'vjepa2' / 'src'
-if vjepa_src.is_dir() and str(vjepa_src) not in sys.path:
+import os
+current_dir = Path(__file__).resolve().parent
+# Try multiple possible paths
+possible_paths = [
+    current_dir.parents[2] / 'external_models' / 'vjepa2' / 'src',  # From src/models/
+    Path.cwd() / 'external_models' / 'vjepa2' / 'src',  # From project root
+    Path('/kaggle/working/audio-classifier/external_models/vjepa2/src'),  # Kaggle specific
+]
+
+vjepa_src = None
+for path in possible_paths:
+    if path.is_dir():
+        vjepa_src = path
+        break
+
+if vjepa_src is None:
+    raise ImportError(f"Could not find vjepa2 src directory. Tried: {possible_paths}")
+
+if str(vjepa_src) not in sys.path:
     sys.path.insert(0, str(vjepa_src))
 
 # Import directly from the src structure
