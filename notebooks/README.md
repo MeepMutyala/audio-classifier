@@ -90,10 +90,13 @@ All models should achieve:
 ### Common Issues
 
 1. **Import Errors**: Make sure you've cloned the repository correctly and updated the GitHub URL
+   - The notebooks now include debugging output to help identify path issues
+   - If the normal import fails, the notebooks will automatically try a direct file import
 2. **CUDA Out of Memory**: Reduce batch size in the training configuration
 3. **Dataset Not Found**: Ensure ESC-50 is uploaded to your Kaggle workspace and accessible
 4. **Mamba Installation Issues**: Use the exact installation commands in the Mamba notebook
 5. **Repository Clone Issues**: Make sure your GitHub repository is public or you have proper access
+6. **Module Not Found**: The notebooks now include fallback import mechanisms that should handle most import issues
 
 ### Memory Optimization
 
