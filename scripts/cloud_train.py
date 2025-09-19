@@ -10,9 +10,16 @@ import os
 import sys
 from pathlib import Path
 
-# Add project root to path
+# Add project root to path and ensure vendored external models are importable
 project_root = Path(__file__).parent.parent
+# Ensure repository root is importable (for src.*)
 sys.path.insert(0, str(project_root))
+
+# Ensure external Liquid-S4 'src' directory is importable in all environments
+external_src = project_root / 'external_models' / 'liquid-S4' / 'src'
+if external_src.exists():
+    sys.path.insert(0, str(external_src))
+
 
 from src.models.mamba_audio import MambaAudioClassifier
 from src.models.liquidS4_audio import LiquidS4AudioClassifier

@@ -2,33 +2,19 @@ import torch
 import torch.nn as nn
 import sys
 import os
-# Clean, simple imports!
-# from external_models.vjepa2.src.models.vision_transformer import VisionTransformer
-# from external_models.vjepa2.src.models.attentive_pooler import AttentiveClassifier
+from pathlib import Path
 
-from models.vision_transformer import VisionTransformer
-from models.attentive_pooler import AttentiveClassifier
-
-# from vjepa2_models.vision_transformer import VisionTransformer
-# from vjepa2_models.attentive_pooler import AttentiveClassifier
-
-# import external_models  # This triggers the sys.path setup
-# from src.models.vision_transformer import VisionTransformer
-# from src.models.attentive_pooler import AttentiveClassifier
-
-# # Add external models to path
-# external_models_path = os.path.join(os.path.dirname(__file__), '../../external_models')
-# vjepa2_path = os.path.join(external_models_path, 'vjepa2')
-# sys.path.insert(0, vjepa2_path)
-
-# Direct imports with fallback
-# try:
-#     from src.models.vision_transformer import VisionTransformer
-#     from src.models.attentive_pooler import AttentiveClassifier
-# except ModuleNotFoundError:
-#     sys.path.insert(0, os.path.join(vjepa2_path, 'src'))
-#     from models.vision_transformer import VisionTransformer
-#     from models.attentive_pooler import AttentiveClassifier
+# Prefer the proper vjepa2 package if installed; fall back to vendored source tree
+try:
+    from vjepa2.models.vision_transformer import VisionTransformer
+    from vjepa2.models.attentive_pooler import AttentiveClassifier
+except ModuleNotFoundError:
+    repo_root = Path(__file__).resolve().parents[2]
+    vjepa_src = repo_root / 'external_models' / 'vjepa2' / 'src'
+    if vjepa_src.is_dir() and str(vjepa_src) not in sys.path:
+        sys.path.insert(0, str(vjepa_src))
+    from vjepa2.models.vision_transformer import VisionTransformer
+    from vjepa2.models.attentive_pooler import AttentiveClassifier
 
 class VJEPA2AudioClassifier(nn.Module):
     def __init__(self, 

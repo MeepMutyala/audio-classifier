@@ -2,41 +2,23 @@ import torch
 import torch.nn as nn
 import sys
 import os
+from pathlib import Path
 
-# # Clean, simple imports - no sys.path manipulation needed!
-# from external_models.liquid_S4.src.models.sequence.model import SequenceModel
-# from external_models.liquid_S4.src.models.sequence.ss.s4 import S4
-# from external_models.liquid_S4.src.tasks.decoders import NDDecoder
-
-from liquid_s4.models.sequence.model import SequenceModel
-from liquid_s4.models.sequence.ss.s4 import S4
-from liquid_s4.tasks.decoders import NDDecoder
-
-# from liquid_s4_models.sequence.model import SequenceModel
-# from liquid_s4_models.sequence.ss.s4 import S4
-# from liquid_s4_tasks.decoders import NDDecoder
-
-# # Add external models to path
-# external_models_path = os.path.join(os.path.dirname(__file__), '../../external_models')
-# liquid_s4_path = os.path.join(external_models_path, 'liquid-S4')
-# sys.path.insert(0, liquid_s4_path)
-
-# # Direct imports from the submodule structure
-# try:
-#     from src.models.sequence.model import SequenceModel
-#     from src.models.sequence.ss.s4 import S4
-#     from src.tasks.decoders import NDDecoder
-# except ModuleNotFoundError:
-#     # Fallback: try importing from the submodule directory directly
-#     sys.path.insert(0, os.path.join(liquid_s4_path, 'src'))
-#     from models.sequence.model import SequenceModel
-#     from models.sequence.ss.s4 import S4
-#     from tasks.decoders import NDDecoder
-
-# import external_models  # This triggers the sys.path setup
-# from src.models.sequence.model import SequenceModel
-# from src.models.sequence.ss.s4 import S4
-# from src.tasks.decoders import NDDecoder
+# Robust import strategy: try packaged path first, then fall back to vendored source tree
+try:
+    from liquid_s4.models.sequence.model import SequenceModel
+    from liquid_s4.models.sequence.ss.s4 import S4
+    from liquid_s4.tasks.decoders import NDDecoder
+except ModuleNotFoundError:
+    # Fallback: import directly from vendored external_models/liquid-S4/src tree
+    repo_root = Path(__file__).resolve().parents[2]  # .../audio-classifier
+    ext_src = repo_root / 'external_models' / 'liquid-S4' / 'src'
+    if ext_src.is_dir() and str(ext_src) not in sys.path:
+        sys.path.insert(0, str(ext_src))
+    # Import from the top-level packages under that src tree
+    from models.sequence.model import SequenceModel
+    from models.sequence.ss.s4 import S4
+    from tasks.decoders import NDDecoder
 
 class LiquidS4AudioClassifier(nn.Module):
     """Audio classification wrapper for Liquid S4"""
@@ -124,7 +106,7 @@ class LiquidS4AudioClassifier(nn.Module):
         x = self.input_projection(x)  # [batch, seq_len, d_model]
         
         # Pass through S4 backbone
-        features = self.backbone(x)  # [batch, seq_len, d_model]
+        features, _ = self.backbone(x)  # [batch, seq_len, d_model]
         
         # Classify using NDDecoder (includes pooling)
         logits = self.classifier(features)  # [batch, num_classes]
@@ -208,6 +190,6 @@ class LiquidS4AudioClassifierAdvanced(nn.Module):
         
     def forward(self, x):
         x = self.input_projection(x)
-        features = self.backbone(x)
+        features, _ = self.backbone(x)
         logits = self.classifier(features)
         return logits
